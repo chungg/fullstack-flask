@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+apiflask = "*"
+flask-admin = "*"
+flask-security-too = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+python-dotenv = "*"
+loguru = "*"
+numpy = "*"
+psycopg2 = "*"
+alembic = "*"
+cryptography = "*"
+
+[dev-packages]
+pytest = "*"
+flake8 = "*"
+pytest-playwright = "*"
+
+[requires]
+python_version = "3.11"
