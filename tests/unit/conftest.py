@@ -1,7 +1,6 @@
 import pytest
 
-
-SQLALCHEMY_DATABASE_URL = "sqlite://"
+from app.app import create_app
 
 
 @pytest.fixture()
@@ -16,7 +15,6 @@ def app():
     app.config["SECURITY_EMAIL_VALIDATOR_ARGS"] = {"check_deliverability": False}
     # Make this plaintext for most tests - reduces unit test time by 50%
     app.config["SECURITY_PASSWORD_HASH"] = "plaintext"
-
 
     yield app
 

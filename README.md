@@ -79,6 +79,8 @@ pipenv run flake8
 
 ### unit
 
+pipenv run pytest tests/unit
+
 ### system
 
 ## resources
