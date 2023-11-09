@@ -4,6 +4,7 @@ from loguru import logger
 
 from app import admin, api
 from app.config import cfg
+from app.core.security import RegisterForm
 from app.extensions import csrf, migrate, security
 from app.models import auth as models
 from app.storage.db import db
@@ -19,7 +20,8 @@ def create_app(conf=cfg):
     user_datastore = SQLAlchemyUserDatastore(db, models.User, models.Role)
 
     csrf.init_app(app)
-    security.init_app(app, user_datastore)
+    security.init_app(app, user_datastore,
+                      register_form=RegisterForm)
 
     if conf.ENABLE_ADMIN:
         logger.info('enabling admin interface...')
