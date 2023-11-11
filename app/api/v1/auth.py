@@ -1,5 +1,6 @@
 from apiflask import pagination_builder
-from flask_security import auth_required
+from flask import abort
+from flask_security import auth_required, roles_accepted, current_user
 
 from app.api.v1 import bp
 from app.models import auth as model
@@ -11,6 +12,7 @@ from app.storage.db import db
 @bp.input(schema.UserQuery, location='query')
 @bp.output(schema.UsersOut)
 @auth_required()
+@roles_accepted('superuser')
 def list_users(query_data):
     pagination = db.paginate(
         db.select(model.User),
@@ -26,5 +28,9 @@ def list_users(query_data):
 
 @bp.get('/users/<int:user_id>')
 @bp.output(schema.UserOut)
+@auth_required()
 def get_user(user_id):
-    return db.get_or_404(model.User, user_id)
+    if current_user.id == user_id or any(role.name == 'superuser'
+                                         for role in current_user.roles):
+        return db.get_or_404(model.User, user_id)
+    abort(403)

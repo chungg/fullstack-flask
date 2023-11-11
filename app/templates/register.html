@@ -14,6 +14,7 @@
     <div class="hero-body is-justify-content-center is-align-items-center">
       <div class="columns is-flex is-flex-direction-column">
         <form action="/api/register" method="POST" class="box">
+          {{ register_user_form.hidden_tag() }}
           <div class="column">
             <label for="email">Email</label>
             <input class="input is-primary" type="email" placeholder="Email address" name="email" required>
@@ -32,7 +33,7 @@
           </div>
         </form>
         <div class="has-text-centered">
-          <p> Already have an account?  <a href="/api/login" class="has-text-primary">Login</a>
+          <p> Already have an account? <a href="/api/login" class="has-text-primary">Login</a>
           </p>
         </div>
       </div>

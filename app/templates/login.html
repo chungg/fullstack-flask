@@ -26,6 +26,7 @@
             <h3 class="title has-text-white">Log in to xyz</h3>
             <hr class="login-hr">
             <form action="/api/login" method="POST" class="box">
+              {{ login_user_form.hidden_tag() }}
               <div class="field">
                 <p class="control has-icons-left has-icons-right">
                   <input class="input" type="email" placeholder="Email" name="email" value="{{ login_user_form.email.data or '' }}" required>

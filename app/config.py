@@ -23,22 +23,22 @@ class AppConfig:
 
     SQLALCHEMY_DATABASE_URI: str
 
-    ENABLE_ADMIN: bool = False
+    ENABLE_ADMIN: bool = True
 
     SECURITY_URL_PREFIX: str = '/api'
     SECURITY_PASSWORD_HASH: str = 'pbkdf2_sha512'
     SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
 
     SECURITY_PASSWORD_SALT: str
-    SECURITY_LOGIN_URL: str = '/login/'
-    SECURITY_LOGOUT_URL: str = '/logout/'
-    SECURITY_REGISTER_URL: str = '/register/'
+    SECURITY_LOGIN_URL: str = '/login'
+    SECURITY_LOGOUT_URL: str = '/logout'
+    SECURITY_REGISTER_URL: str = '/register'
     SECURITY_LOGIN_USER_TEMPLATE = 'login.html'
     SECURITY_REGISTER_USER_TEMPLATE = 'register.html'
 
     SECURITY_FLASH_MESSAGES: bool = False
     SECURITY_RECOVERABLE: bool = True
-    SECURITY_TRACKABLE: bool = False
+    SECURITY_TRACKABLE: bool = True
     SECURITY_CHANGEABLE: bool = True
     SECURITY_CONFIRMABLE: bool = False
     SECURITY_REGISTERABLE: bool = True
@@ -111,5 +111,8 @@ class AppConfig:
         return str(self.__dict__)
 
 
-load_dotenv()
-cfg = AppConfig(os.environ)
+def get_config():
+    if os.environ.get('ENV') == 'local':
+        load_dotenv()
+
+    return AppConfig(os.environ)

@@ -1,11 +1,10 @@
 import flask
-from flask_security import auth_required, logout_user
+from flask_security import logout_user
 
 from app.api import bp
 
 
 @bp.get('/')
-@auth_required()
 def index():
     return flask.render_template("index.html")
 

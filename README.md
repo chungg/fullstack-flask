@@ -22,7 +22,8 @@ sample app which provides:
   - `create database <dbname>;`
   - `create user <user> with encrypted password '<pw>';`
   - `grant all privileges on database <dbname> to <user>;`
-  - `grant all on schema public to <user>;`
+  - `create schema <schema>;`
+  - `grant all on schema <schema> to <user>;`
 
 ## configuring
 
@@ -43,27 +44,27 @@ todo how to set up external providers
 
 #### autogen migrations
 
-pipenv run flask --app app.app db migrate -m '<description>' --directory app/storage/migrations
+ENV=local pipenv run flask --app app.app db migrate -m '<description>' --directory app/storage/migrations
 
 #### apply
 
-pipenv run flask --app app.app db upgrade --directory app/storage/migrations
+ENV=local pipenv run flask --app app.app db upgrade --directory app/storage/migrations
 
 #### init (if starting from scratch or you want to compress migrations)
 
-pipenv run flask --app app.app db init --directory app/storage/migrations
+ENV=local pipenv run flask --app app.app db init --directory app/storage/migrations
 
 ## running
 
 ### server
 
-- pipenv run flask --app app.app run
+ENV=local pipenv run flask --app app.app run --debug
 
 ### client
 
     import requests
     sess = requests.Session()
-    sess.post('http://127.0.0.1:5000/api/login/',
+    sess.post('http://127.0.0.1:5000/api/login',
               data={'email':'<email>','password':'<pw>', 'remember': 'false'},
               headers={"Content-Type": "application/x-www-form-urlencoded"})
     # session should have cookie
@@ -85,9 +86,11 @@ pipenv run pytest tests/unit
 
 ## resources
 
-- oauth configuration:
-  - https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask-in-2023
-  - https://flask-security-too.readthedocs.io/en/stable/features.html#social-oauth-authentication
+- flask-security:
+  - https://github.com/mattupstate/flask-security/issues/769
+  - oauth configuration:
+    - https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask-in-2023
+    - https://flask-security-too.readthedocs.io/en/stable/features.html#social-oauth-authentication
 - flask deep dives (tbh, i didn't read/watch these but so i clear bookmarks):
   - https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xxiii-application-programming-interfaces-apis
   - https://hackersandslackers.com/flask-user-sessions-and-redis/
