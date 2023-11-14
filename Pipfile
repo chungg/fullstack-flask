@@ -15,6 +15,7 @@ numpy = "*"
 psycopg2 = "*"
 alembic = "*"
 cryptography = "*"
+rich = "*"
 
 [dev-packages]
 pytest = "*"

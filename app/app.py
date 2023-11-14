@@ -4,6 +4,7 @@ from loguru import logger
 
 from app import admin, api
 from app import config
+from app.cli import show
 from app.core.security import RegisterForm
 from app.extensions import csrf, migrate, security
 from app.models import auth as models
@@ -38,5 +39,8 @@ def create_app(conf=None):
 
     logger.info('enabling endpoints...')
     app.register_blueprint(api.bp)
+
+    logger.info('enabling cli...')
+    app.cli.add_command(show)
 
     return app
