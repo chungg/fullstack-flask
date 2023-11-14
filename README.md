@@ -84,6 +84,19 @@ pipenv run pytest tests/unit
 
 ### system
 
+#### setup
+
+pipenv run playwright install
+
+#### run
+
+ENV=local pipenv run flask --app app.app run
+TEST_USER=<user> TEST_PW=<pw> pipenv run pytest tests/system
+
+#### debug
+
+TEST_USER=<user> TEST_PW=<pw> pipenv run pytest tests/system -k <test_case> --headed --slowmo 1000
+
 ## resources
 
 - flask-security:
