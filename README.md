@@ -11,6 +11,7 @@ sample app which provides:
 - system testing via [playwright](https://github.com/microsoft/playwright)
 - admin views via [flask-admin](https://github.com/flask-admin/flask-admin)
 - package management via [pipenv](https://github.com/pypa/pipenv)
+- cli via [click](https://github.com/pallets/click) and [rich](https://github.com/Textualize/rich)
 
 ## setup
 
@@ -44,21 +45,21 @@ todo how to set up external providers
 
 #### autogen migrations
 
-ENV=local pipenv run flask --app app.app db migrate -m '<description>' --directory app/storage/migrations
+- ENV=local pipenv run flask --app app.app db migrate -m '<description>' --directory app/storage/migrations
 
 #### apply
 
-ENV=local pipenv run flask --app app.app db upgrade --directory app/storage/migrations
+- ENV=local pipenv run flask --app app.app db upgrade --directory app/storage/migrations
 
 #### init (if starting from scratch or you want to compress migrations)
 
-ENV=local pipenv run flask --app app.app db init --directory app/storage/migrations
+- ENV=local pipenv run flask --app app.app db init --directory app/storage/migrations
 
 ## running
 
 ### server
 
-ENV=local pipenv run flask --app app.app run --debug
+- ENV=local pipenv run flask --app app.app run --debug
 
 ### client
 
@@ -72,30 +73,30 @@ ENV=local pipenv run flask --app app.app run --debug
 
 ## running tests
 
-pipenv install --dev
+- pipenv install --dev
 
 ### styling
 
-pipenv run flake8
+- pipenv run flake8
 
 ### unit
 
-pipenv run pytest tests/unit
+- pipenv run pytest tests/unit
 
 ### system
 
 #### setup
 
-pipenv run playwright install
+- pipenv run playwright install
 
 #### run
 
-ENV=local pipenv run flask --app app.app run
-TEST_USER=<user> TEST_PW=<pw> pipenv run pytest tests/system
+- ENV=local pipenv run flask --app app.app run
+- TEST_USER=<user> TEST_PW=<pw> pipenv run pytest tests/system
 
 #### debug
 
-TEST_USER=<user> TEST_PW=<pw> pipenv run pytest tests/system -k <test_case> --headed --slowmo 1000
+- TEST_USER=<user> TEST_PW=<pw> pipenv run pytest tests/system -k <test_case> --headed --slowmo 1000
 
 ## resources
 
