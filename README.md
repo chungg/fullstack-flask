@@ -55,6 +55,17 @@ todo how to set up external providers
 
 - ENV=local pipenv run flask --app app.app db init --directory app/storage/migrations
 
+### permissions
+
+#### init
+
+- ENV=local pipenv run flask --app app.app roles create superuser
+- ENV=local pipenv run flask --app app.app users create <email> -a
+
+#### details
+
+- ENV=local pipenv run flask --app app.app show roles
+
 ## running
 
 ### server
@@ -116,6 +127,6 @@ todo how to set up external providers
 # todo
 - more frontend via htmx https://htmx.org/docs/
 - customise bulma via https://bulma.io/documentation/customize/
-- charts via https://echarts.apache.org/en/index.html
-- tables via https://datatables.net/
+- charts via chartjs, https://echarts.apache.org/en/index.html
+- tables via tanstack, https://datatables.net/
 - worker processes? via ?
