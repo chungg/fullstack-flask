@@ -36,6 +36,7 @@
       <hr />
       <canvas hx-get="/api/v1/data/sales" hx-trigger="load" hx-indicator='.htmx-indicator'
         id="line_chart_id"></canvas>
+      <span>https://data.bts.gov/Research-and-Statistics/Auto-Sales/7n6a-n5tz</span>
       <progress class="progress is-small htmx-indicator" max="100"></progress>
     </div>
   </section>
@@ -48,7 +49,7 @@
             hx-swap="none">populate</button>
         </div>
       </div>
-      <div class="column is-four-fifths">
+      <div class="column is-10">
         <canvas id="chart_id" />
       </div>
     </div>
