@@ -5,3 +5,4 @@ bp = APIBlueprint('v1', __name__)
 
 
 from app.api.v1 import auth  # noqa
+from app.api.v1 import data  # noqa

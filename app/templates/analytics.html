@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.7.0"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- https://www.chartjs.org/docs/latest/developers/updates.html -->
+  <script>
+    function addData(chart, newData, labels) {
+        newData.forEach(data => {
+            chart.data.datasets.push(data);
+        });
+        if (labels != null) {
+          chart.data.labels = labels;
+        }
+        chart.update();
+    }
+  </script>
+  <title>Charting</title>
+</head>
+
+<body id="body">
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        Chart
+      </h1>
+      <hr />
+      <canvas hx-get="/api/v1/data/sales" hx-trigger="load" hx-indicator='.htmx-indicator'
+        id="line_chart_id"></canvas>
+      <progress class="progress is-small htmx-indicator" max="100"></progress>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+    <div class="columns">
+      <div class="column">
+        <div class="field">
+          <button class="button" hx-get="/api/v1/data/random" hx-trigger="click, revealed"
+            hx-swap="none">populate</button>
+        </div>
+      </div>
+      <div class="column is-four-fifths">
+        <canvas id="chart_id" />
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <script>
+    // HTMX CSRF Token
+    document.body.addEventListener('htmx:configRequest', (event) => {
+      event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    })
+    // chartjs + htmx with payload in HX-Trigger
+    document.body.addEventListener("drawChart", function(evt){
+      const chart = Chart.getChart(evt.detail.target)
+      addData(chart, evt.detail.datasets, evt.detail.labels);
+    })
+
+    new Chart(
+      document.getElementById("chart_id"),
+      {
+        type: "bar",
+        options: {
+          responsive: true,
+          title: {
+            display: false,
+            text: ""
+          }
+        },
+        data: {
+          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']
+        }
+      }
+    );
+
+    new Chart(
+      document.getElementById("line_chart_id"),
+      {
+        type: "line",
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: "top",
+            },              
+            title: {
+              display: true,
+              text: "Vehicles Sales"
+            },
+            tooltip: {
+              position: 'average',
+            }
+          },
+          interaction: {
+            axis: 'x',
+            intersect: false,
+            mode: 'nearest',
+          }
+        },
+      }
+    );
+  </script>
+</body>
+</html>

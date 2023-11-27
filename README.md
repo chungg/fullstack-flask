@@ -1,17 +1,21 @@
 # flask + htmx + bulma
 
 sample app which provides:
-- backend via [apiflask](https://github.com/apiflask/apiflask)
-- db via [sqlalchemy](https://github.com/sqlalchemy/sqlalchemy)
-- config management via [dotenv](https://github.com/theskumar/python-dotenv)
-- frontend via [htmx](https://github.com/bigskysoftware/htmx) and [jinja](https://github.com/pallets/jinja) (because i was too lazy to override security endpoints)
-- styling via [bulma](https://github.com/jgthms/bulma)
-- security via [flask-security-too](https://github.com/Flask-Middleware/flask-security)
-- testing via [pytest](https://github.com/pytest-dev/pytest)
-- system testing via [playwright](https://github.com/microsoft/playwright)
-- admin views via [flask-admin](https://github.com/flask-admin/flask-admin)
-- package management via [pipenv](https://github.com/pypa/pipenv)
-- cli via [click](https://github.com/pallets/click) and [rich](https://github.com/Textualize/rich)
+- backend
+  - backend via [apiflask](https://github.com/apiflask/apiflask)
+  - db via [sqlalchemy](https://github.com/sqlalchemy/sqlalchemy)
+  - config management via [dotenv](https://github.com/theskumar/python-dotenv)
+  - security via [flask-security-too](https://github.com/Flask-Middleware/flask-security)
+  - admin views via [flask-admin](https://github.com/flask-admin/flask-admin)
+  - package management via [pipenv](https://github.com/pypa/pipenv)
+  - cli via [click](https://github.com/pallets/click) and [rich](https://github.com/Textualize/rich)
+- ui
+  - frontend via [htmx](https://github.com/bigskysoftware/htmx) and [jinja](https://github.com/pallets/jinja) (because i was too lazy to override security endpoints)
+  - styling via [bulma](https://github.com/jgthms/bulma)
+  - charting via [chartjs](https://www.chartjs.org/)
+- test
+  - runner via [pytest](https://github.com/pytest-dev/pytest)
+  - system testing via [playwright](https://github.com/microsoft/playwright)
 
 ## setup
 
@@ -123,10 +127,14 @@ todo how to set up external providers
 - bulma
   - templates - https://github.com/BulmaTemplates/bulma-templates
   - buttons - https://github.com/aldi/bulma-social
+- chart options - https://www.monterail.com/blog/javascript-libraries-data-visualization
+- htmx
+  - https://blog.ohheybrian.com/2023/06/smarter-templating-with-htmx-and-flask/
+  - https://www.advantch.com/blog/how-to-build-interactive-charts-in-python-using-htmx-and-echarts/
+  - https://github.com/Konfuzian/htmx-examples-with-flask
 
 # todo
 - more frontend via htmx https://htmx.org/docs/
 - customise bulma via https://bulma.io/documentation/customize/
-- charts via chartjs, https://echarts.apache.org/en/index.html
-- tables via tanstack, https://datatables.net/
+- tables via tanstack
 - worker processes? via ?

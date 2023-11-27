@@ -11,6 +11,11 @@ def index():
     return flask.render_template("index.html")
 
 
+@bp.get('/analytics')
+def analytics():
+    return flask.render_template("analytics.html")
+
+
 @bp.get('/logout')
 def logout():
     logout_user()
