@@ -3,7 +3,8 @@ import json
 import duckdb
 import flask
 from flask import request
-import pyarrow.compute as pa_compute
+import pyarrow.csv as pa_csv
+import pyarrow.compute as pc
 import numpy as np
 
 from app.api.v1 import bp
@@ -26,17 +27,23 @@ def random_data():
 
 @bp.get('/data/sales')
 def sales_data():
-    df = duckdb.read_csv('app/data/Monthly_Transportation_Statistics.csv')
-    table = duckdb.sql("""
-SELECT Date, "Light truck sales", "Auto sales",
-FROM df
-WHERE "Auto sales" is not null
-    """).arrow()
+#    sample processing via duckdb. performance is much worse as of writing
+#    df = duckdb.read_csv('app/data/Monthly_Transportation_Statistics.csv')
+#    table = duckdb.sql("""
+#SELECT Date, "Light truck sales", "Auto sales",
+#FROM df
+#WHERE "Auto sales" is not null
+#    """).arrow()
+
+    table = pa_csv.read_csv(
+        'app/data/Monthly_Transportation_Statistics.csv',
+        convert_options=pa_csv.ConvertOptions(timestamp_parsers=['%m/%d/%Y %H:%M:%S %p'])
+    ).filter(pc.field('Auto sales').is_valid())
     data = {'datasets': [{'label': 'truck',
                           'data': table['Light truck sales'].to_pylist()},
                          {'label': 'auto',
                           'data': table['Auto sales'].to_pylist()}],
-            'labels': pa_compute.strftime(table['Date'], format='%Y-%m-%d').to_pylist()}
+            'labels': pc.strftime(table['Date'], format='%Y-%m-%d').to_pylist()}
     if request.headers.get('Hx-Request'):
         resp = flask.Response()
         resp.headers['HX-Trigger'] = json.dumps(
