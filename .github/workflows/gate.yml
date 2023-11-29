@@ -1,0 +1,27 @@
+name: gate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  check-style:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+          cache: 'pipenv'
+      - name: install dependencies
+        run: |
+          pip install pipenv
+      - name: Check style
+        run: |
+          pipenv install --dev
+          pipenv run flake8
