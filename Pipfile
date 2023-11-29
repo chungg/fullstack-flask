@@ -23,6 +23,7 @@ duckdb = "*"
 pytest = "*"
 flake8 = "*"
 pytest-playwright = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.11"

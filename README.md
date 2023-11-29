@@ -1,3 +1,5 @@
+[![gate](https://github.com/chungg/fullstack-flask/actions/workflows/gate.yml/badge.svg)](https://github.com/chungg/fullstack-flask/actions/workflows/gate.yml)
+
 # flask + htmx + bulma
 
 sample app which provides:
@@ -96,7 +98,8 @@ todo how to set up external providers
 
 ### unit
 
-- pipenv run pytest tests/unit
+- SQLALCHEMY_DATABASE_URI=<postgres_uri> pipenv run pytest tests/unit
+- see github actions workflow for sample
 
 ### system
 

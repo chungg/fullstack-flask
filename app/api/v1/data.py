@@ -1,6 +1,5 @@
 import json
 
-import duckdb
 import flask
 from flask import request
 import pyarrow.csv as pa_csv
@@ -18,8 +17,7 @@ def random_data():
         resp = flask.Response()
         resp.headers['HX-Trigger'] = json.dumps(
             {'drawChart': {'target': 'chart_id',
-                           'datasets': [data]}
-            })
+                           'datasets': [data]}})
         return resp
 
     return data
@@ -27,13 +25,13 @@ def random_data():
 
 @bp.get('/data/sales')
 def sales_data():
-#    sample processing via duckdb. performance is much worse as of writing
-#    df = duckdb.read_csv('app/data/Monthly_Transportation_Statistics.csv')
-#    table = duckdb.sql("""
-#SELECT Date, "Light truck sales", "Auto sales",
-#FROM df
-#WHERE "Auto sales" is not null
-#    """).arrow()
+    # sample processing via duckdb. performance is much worse as of writing
+    # df = duckdb.read_csv('app/data/Monthly_Transportation_Statistics.csv')
+    # table = duckdb.sql("""
+    #     SELECT Date, "Light truck sales", "Auto sales",
+    #     FROM df
+    #     WHERE "Auto sales" is not null
+    # """).arrow()
 
     table = pa_csv.read_csv(
         'app/data/Monthly_Transportation_Statistics.csv',

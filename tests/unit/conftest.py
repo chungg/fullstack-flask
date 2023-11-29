@@ -12,8 +12,6 @@ def app():
     os.environ.update({
         'SECRET_KEY': 'abc',
         'SECURITY_PASSWORD_SALT': 'abc',
-        'SQLALCHEMY_DATABASE_URI': (
-            'postgresql://tuser:blah@localhost/demo?options=-c%20search_path=blah'),
     })
 
     conf = config.get_config().__dict__
