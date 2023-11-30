@@ -142,3 +142,4 @@ todo how to set up external providers
 - customise bulma via https://bulma.io/documentation/customize/
 - tables via tanstack
 - worker processes? via ?
+- optimised ci via [mergify](https://mergify.com/)
