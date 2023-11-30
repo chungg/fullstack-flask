@@ -44,6 +44,8 @@ jobs:
         ports:
           - 5432:5432
 
+    env:
+      SQLALCHEMY_DATABASE_URI: postgresql://postgres:postgres@localhost/postgres
     steps:
       - uses: actions/checkout@v4
       - name: set up python
@@ -54,8 +56,58 @@ jobs:
       - name: install dependencies
         run: |
           pip install pipenv
+          pipenv install --dev
       - name: run unit tests
         run: |
+          pipenv run pytest --cov-report term --cov=app tests/unit
+
+  run-system-tests:
+    runs-on: ubuntu-latest
+
+    # https://docs.github.com/en/actions/using-containerized-services/creating-postgresql-service-containers
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    env:
+      SQLALCHEMY_DATABASE_URI: postgresql://postgres:postgres@localhost/postgres
+      SECRET_KEY: abc123
+      SECURITY_PASSWORD_SALT: abc123
+      SECURITY_REGISTERABLE: True
+      TEST_USER: "ci@gmail.com"
+      TEST_PW: abc123xyz789
+    steps:
+      - uses: actions/checkout@v4
+      - name: set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pipenv'
+      - name: install dependencies
+        run: |
+          pip install pipenv
           pipenv install --dev
-          SQLALCHEMY_DATABASE_URI=postgresql://postgres:postgres@localhost/postgres pipenv run \
-          pytest --cov-report term --cov=app tests/unit
+          pipenv run playwright install
+      - name: initialise db
+        run: |
+          ENV=CI pipenv run flask --app app.app db upgrade --directory app/storage/migrations
+          ENV=CI pipenv run flask --app app.app roles create superuser
+          ENV=CI pipenv run flask --app app.app users create $TEST_USER --password $TEST_PW -a
+          ENV=CI pipenv run flask --app app.app roles add $TEST_USER superuser
+      - name: start server
+        run: |
+          ENV=CI pipenv run flask --app app.app run & \
+            sleep 3 && \
+            curl http://localhost:5000 -I
+      - name: run system tests
+        run: |
+          ENV=CI pipenv run pytest tests/system

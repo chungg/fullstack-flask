@@ -18,6 +18,7 @@ sample app which provides:
 - test
   - runner via [pytest](https://github.com/pytest-dev/pytest)
   - system testing via [playwright](https://github.com/microsoft/playwright)
+  - ci via [gitub actions](https://github.com/features/actions)
 
 ## setup
 
