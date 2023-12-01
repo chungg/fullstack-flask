@@ -96,7 +96,7 @@ jobs:
         run: |
           pip install pipenv
           pipenv install --dev
-          pipenv run playwright install
+          pipenv run playwright install chromium
       - name: initialise db
         run: |
           ENV=CI pipenv run flask --app app.app db upgrade --directory app/storage/migrations
