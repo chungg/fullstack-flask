@@ -49,3 +49,35 @@ def sales_data():
                            **data}})
         return resp
     return data
+
+
+@bp.get('/data/deaths')
+def death_data():
+    # https://www150.statcan.gc.ca/n1/daily-quotidien/231127/t001b-eng.htm
+    table = pa_csv.read_csv('app/data/can-deaths.csv')
+    data = {'data': table.to_pylist()}
+    if request.headers.get('Hx-Request'):
+        col_props = ','.join(
+          f'{{title:"{col_name}", field:"{col_name}", headerHozAlign:"center", hozAlign:"right"}}'
+          for col_name in table.column_names if col_name != 'cause'
+        )
+        return """
+            <script>
+              new Tabulator("#death-table", {
+                layout: "fitColumns",
+                data: %s,
+                frozenRowsField: "cause",
+                frozenRows: ["Total"],
+                columnHeaderVertAlign: "bottom",
+                columns: [
+                  {title: "cause", field: "cause", resizable: "header", frozen: true,
+                  },
+                  {title: "year",
+                   headerHozAlign: "center",
+                   columns: [%s]
+                  },
+                ]
+              });
+            </script>
+        """ % (data['data'], col_props)
+    return data

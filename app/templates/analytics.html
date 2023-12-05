@@ -7,13 +7,15 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_bulma.min.css">
+  <!--link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_simple.min.css"-->
 
-  <!-- HTMX -->
-  <script src="https://unpkg.com/htmx.org@1.7.0"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+  <script src="https://unpkg.com/chart.js@4.4.0"></script>
+  <script src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- https://www.chartjs.org/docs/latest/developers/updates.html -->
   <script>
+    // https://www.chartjs.org/docs/latest/developers/updates.html
     function addData(chart, newData, labels) {
         newData.forEach(data => {
             chart.data.datasets.push(data);
@@ -33,7 +35,7 @@
       <h1 class="title">
         Chart
       </h1>
-      <hr />
+      <hr></hr>
       <canvas hx-get="/api/v1/data/sales" hx-trigger="load" hx-indicator='.htmx-indicator'
         id="line_chart_id"></canvas>
       <span>https://data.bts.gov/Research-and-Statistics/Auto-Sales/7n6a-n5tz</span>
@@ -53,6 +55,11 @@
         <canvas id="chart_id" />
       </div>
     </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="is-striped" id="death-table" hx-get="/api/v1/data/deaths" hx-trigger="revealed"></div>
     </div>
   </section>
 
