@@ -12,9 +12,10 @@ sample app which provides:
   - package management via [pipenv](https://github.com/pypa/pipenv)
   - cli via [click](https://github.com/pallets/click) and [rich](https://github.com/Textualize/rich)
 - ui
-  - frontend via [htmx](https://github.com/bigskysoftware/htmx) and [jinja](https://github.com/pallets/jinja) (because i was too lazy to override security endpoints)
+  - frontend via [htmx](https://github.com/bigskysoftware/htmx) and [jinja](https://github.com/pallets/jinja)
   - styling via [bulma](https://github.com/jgthms/bulma)
   - charting via [chartjs](https://www.chartjs.org/)
+  - tables via [tabulator](https://tabulator.info/)
 - test
   - runner via [pytest](https://github.com/pytest-dev/pytest)
   - system testing via [playwright](https://github.com/microsoft/playwright)
@@ -132,6 +133,11 @@ todo how to set up external providers
   - templates - https://github.com/BulmaTemplates/bulma-templates
   - buttons - https://github.com/aldi/bulma-social
 - chart options - https://www.monterail.com/blog/javascript-libraries-data-visualization
+- alt reactive tables
+  - [grid.js](https://gridjs.io/) - seems to mildly inactive, simpler functionality
+  - [tanstack](https://tanstack.com/table) - docs are not helpful if not using framework
+  - [glide](https://grid.glideapps.com/) - requires react
+  - [ag-grid](https://www.ag-grid.com/) - requires money
 - htmx
   - https://blog.ohheybrian.com/2023/06/smarter-templating-with-htmx-and-flask/
   - https://www.advantch.com/blog/how-to-build-interactive-charts-in-python-using-htmx-and-echarts/
@@ -140,6 +146,6 @@ todo how to set up external providers
 # todo
 - more frontend via htmx https://htmx.org/docs/
 - customise bulma via https://bulma.io/documentation/customize/
-- tables via tanstack
 - worker processes? via ?
 - optimised ci via [mergify](https://mergify.com/)
+- https://unsuckjs.com/
