@@ -76,9 +76,14 @@ todo how to set up external providers
 
 ## running
 
-### server
+### server (locally)
 
 - ENV=local pipenv run flask --app app.app run --debug
+
+### server (container - locally)
+
+- podman build -f Dockerfile
+- podman run --network host -p 5000:5000 --env-file=.env <image id> flask --app app.app run --debug
 
 ### client
 
