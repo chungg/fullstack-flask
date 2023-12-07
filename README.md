@@ -13,11 +13,12 @@ sample app which provides:
   - cli via [click](https://github.com/pallets/click) and [rich](https://github.com/Textualize/rich)
 - ui
   - frontend via [htmx](https://github.com/bigskysoftware/htmx) and [jinja](https://github.com/pallets/jinja)
-  - styling via [bulma](https://github.com/jgthms/bulma)
+  - styling via [bulma](https://github.com/jgthms/bulma) and [bulma-extensions](https://wikiki.github.io/)
   - charting via [chartjs](https://www.chartjs.org/)
   - tables via [tabulator](https://tabulator.info/)
 - test
   - runner via [pytest](https://github.com/pytest-dev/pytest)
+  - code styles via [flake8](https://flake8.pycqa.org/en/latest/) and [biome](https://biomejs.dev)
   - system testing via [playwright](https://github.com/microsoft/playwright)
   - ci via [gitub actions](https://github.com/features/actions)
 
@@ -102,6 +103,7 @@ todo how to set up external providers
 ### styling
 
 - pipenv run flake8
+- ./biome check app/static
 
 ### unit
 

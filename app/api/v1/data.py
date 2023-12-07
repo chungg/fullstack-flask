@@ -26,7 +26,7 @@ def random_data():
 @bp.get('/data/sales')
 def sales_data():
     # sample processing via duckdb. performance is much worse as of writing
-    # df = duckdb.read_csv('app/data/Monthly_Transportation_Statistics.csv')
+    # df = duckdb.read_csv('app/static/data/Monthly_Transportation_Statistics.csv')
     # table = duckdb.sql("""
     #     SELECT Date, "Light truck sales", "Auto sales",
     #     FROM df
@@ -34,7 +34,7 @@ def sales_data():
     # """).arrow()
 
     table = pa_csv.read_csv(
-        'app/data/Monthly_Transportation_Statistics.csv',
+        'app/static/data/Monthly_Transportation_Statistics.csv',
         convert_options=pa_csv.ConvertOptions(timestamp_parsers=['%m/%d/%Y %H:%M:%S %p'])
     ).filter(pc.field('Auto sales').is_valid())
     data = {'datasets': [{'label': 'truck',
@@ -54,7 +54,7 @@ def sales_data():
 @bp.get('/data/deaths')
 def death_data():
     # https://www150.statcan.gc.ca/n1/daily-quotidien/231127/t001b-eng.htm
-    table = pa_csv.read_csv('app/data/can-deaths.csv')
+    table = pa_csv.read_csv('app/static/data/can-deaths.csv')
     data = {'data': table.to_pylist()}
     if request.headers.get('Hx-Request'):
         col_props = ','.join(
