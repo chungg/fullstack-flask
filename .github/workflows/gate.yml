@@ -27,9 +27,19 @@ jobs:
           pipenv install --dev
           pipenv run flake8
 
+  check-web-style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: install dependencies
+        run: |
+          curl -L https://github.com/biomejs/biome/releases/download/cli%2Fv1.3.3/biome-linux-x64 -o biome
+          chmod +x biome
+      - name: check style
+        run: ./biome check app/static
+
   run-unit-tests:
     runs-on: ubuntu-latest
-
     # https://docs.github.com/en/actions/using-containerized-services/creating-postgresql-service-containers
     services:
       postgres:
@@ -63,7 +73,6 @@ jobs:
 
   run-system-tests:
     runs-on: ubuntu-latest
-
     # https://docs.github.com/en/actions/using-containerized-services/creating-postgresql-service-containers
     services:
       postgres:

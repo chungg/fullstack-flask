@@ -9,23 +9,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_bulma.min.css">
   <!--link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_simple.min.css"-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-switch@2.0.4/dist/css/bulma-switch.min.css">
 
   <script src="https://unpkg.com/htmx.org@1.9.9"></script>
   <script src="https://unpkg.com/chart.js@4.4.0"></script>
   <script src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
 
-  <script>
-    // https://www.chartjs.org/docs/latest/developers/updates.html
-    function addData(chart, newData, labels) {
-        newData.forEach(data => {
-            chart.data.datasets.push(data);
-        });
-        if (labels != null) {
-          chart.data.labels = labels;
-        }
-        chart.update();
-    }
-  </script>
+  <script src="../../static/js/utils.js"></script>
+
   <title>Charting</title>
 </head>
 
@@ -36,6 +27,12 @@
         Chart
       </h1>
       <hr></hr>
+      <div class="field">
+        <input id="switchSalesView" type="checkbox" name="switchSalesView" class="switch"
+          onchange="toggleView(this, Chart.getChart('line_chart_id'))"
+          autocomplete="off">
+        <label for="switchSalesView">As Percentage</label>
+      </div>
       <canvas hx-get="/api/v1/data/sales" hx-trigger="load" hx-indicator='.htmx-indicator'
         id="line_chart_id"></canvas>
       <span>https://data.bts.gov/Research-and-Statistics/Auto-Sales/7n6a-n5tz</span>
