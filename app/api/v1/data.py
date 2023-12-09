@@ -55,7 +55,6 @@ def sales_data():
 
 @bp.get('/data/deaths')
 def death_data():
-    # https://www150.statcan.gc.ca/n1/daily-quotidien/231127/t001b-eng.htm
     table = pa_csv.read_csv('app/static/data/can-deaths.csv')
     data = {'data': table.to_pylist()}
     if request.headers.get('Hx-Request'):
