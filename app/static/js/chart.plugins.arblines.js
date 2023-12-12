@@ -1,32 +1,4 @@
-let og_datasets;
-
-function toggleView(elem, chart) {
-  if (elem.checked) {
-    og_datasets = chart.data.datasets.map((dataset) => {
-      return dataset.data;
-    });
-    const total = og_datasets.reduce((r, a) => r.map((b, i) => a[i] + b));
-    for (const [index, data] of og_datasets.entries()) {
-      chart.data.datasets[index].data = data.map((a, i) => (a / total[i]) * 100);
-    }
-  } else {
-    for (const [index, data] of og_datasets.entries()) {
-      chart.data.datasets[index].data = data;
-    }
-  }
-  chart.update();
-}
-
-// https://www.chartjs.org/docs/latest/developers/updates.html
-function addData(chart, newData, labels) {
-  for (const data of newData) {
-    chart.data.datasets.push(data);
-  }
-  if (labels != null) {
-    chart.data.labels = labels;
-  }
-  chart.update();
-}
+import { isKeyDown } from "./listeners.js";
 
 const chartStates = new WeakMap();
 const arbLines = {
@@ -46,6 +18,7 @@ const arbLines = {
     });
   },
 
+  // https://stackoverflow.com/a/77663018/23104322
   afterEvent(chart, args, options) {
     const { ctx, chartArea } = chart;
     const state = chartStates.get(chart);
@@ -59,9 +32,10 @@ const arbLines = {
         break;
       case "mousemove":
         if (state.startXY) {
+          ctx.setLineDash([]);
           ctx.beginPath();
           ctx.lineWidth = options.lineWidth;
-          const line = getCoords(chartArea, {
+          const line = getLineCoords(chartArea, {
             ...state.startXY,
             x2: args.event.x,
             y2: args.event.y,
@@ -71,7 +45,6 @@ const arbLines = {
           ctx.lineTo(line.x2, line.y2);
           ctx.strokeStyle = "grey";
           ctx.stroke();
-          ctx.restore();
         }
         break;
       case "mouseup":
@@ -96,10 +69,11 @@ const arbLines = {
   afterDatasetsDraw(chart, args, options) {
     const { ctx, chartArea } = chart;
     const state = chartStates.get(chart);
+    ctx.setLineDash([]);
     for (const line of state.lines) {
       ctx.beginPath();
       ctx.lineWidth = options.lineWidth;
-      const drawLine = getCoords(chartArea, line);
+      const drawLine = getLineCoords(chartArea, line);
       ctx.moveTo(drawLine.x1, drawLine.y1);
       ctx.lineTo(drawLine.x2, drawLine.y2);
       ctx.strokeStyle = options.color;
@@ -109,7 +83,7 @@ const arbLines = {
   },
 };
 
-function getCoords(chartArea, line) {
+function getLineCoords(chartArea, line) {
   if (line.full === false) {
     return {
       x1: line.x,
@@ -141,14 +115,4 @@ function getCoords(chartArea, line) {
   };
 }
 
-const isKeyDown = (() => {
-  // https://stackoverflow.com/a/48750898
-  const state = {};
-
-  // biome-ignore lint: let it mod
-  window.addEventListener("keyup", (e) => (state[e.key] = false));
-  // biome-ignore lint: let it mod
-  window.addEventListener("keydown", (e) => (state[e.key] = true));
-
-  return (key) => (Object.hasOwn(state, key) && state[key]) || false;
-})();
+export { arbLines };
