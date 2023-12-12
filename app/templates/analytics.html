@@ -62,58 +62,55 @@
 
   <script>
     // chartjs + htmx with payload in HX-Trigger
-    document.body.addEventListener("drawChart", function(evt){
-      const chart = Chart.getChart(evt.detail.target)
+    document.body.addEventListener("drawChart", function (evt) {
+      const chart = Chart.getChart(evt.detail.target);
       // https://www.reddit.com/r/htmx/comments/10sdk43/comment/j72m2j7/
       data = JSON.parse(document.getElementById(evt.detail.dataId).textContent);
       addData(chart, data.datasets, data.labels);
-      document.getElementById(evt.detail.dataId).remove()
-    })
+      document.getElementById(evt.detail.dataId).remove();
+    });
 
-    new Chart(
-      document.getElementById("chartId"),
-      {
-        type: "bar",
-        options: {
-          responsive: true,
-          title: {
-            display: false,
-            text: ""
-          }
+    new Chart(document.getElementById("chartId"), {
+      type: "bar",
+      options: {
+        responsive: true,
+        title: {
+          display: false,
+          text: "",
         },
-        data: {
-          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']
-        }
-      }
-    );
+      },
+      data: {
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+      },
+    });
 
-    new Chart(
-      document.getElementById("lineChartId"),
-      {
-        type: "line",
-        plugins: [arbLines],
-        options: {
-          events: ['mousedown', 'mouseup', 'mousemove'],
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "top",
-            },              
-            title: {
-              display: true,
-              text: "Vehicles Sales"
-            },
-            tooltip: {
-              position: 'average',
-            }
+    new Chart(document.getElementById("lineChartId"), {
+      type: "line",
+      plugins: [arbLines],
+      options: {
+        events: ["mousedown", "mouseup", "mousemove"],
+        responsive: true,
+        plugins: {
+          colors: {
+            forceOverride: true,
           },
-          interaction: {
-            axis: 'x',
-            intersect: false,
-            mode: 'nearest',
-          }
+          legend: {
+            position: "top",
+          },
+          title: {
+            display: true,
+            text: "Vehicles Sales",
+          },
+          tooltip: {
+            position: "average",
+          },
         },
-      }
-    );
+        interaction: {
+          axis: "x",
+          intersect: false,
+          mode: "nearest",
+        },
+      },
+    });
   </script>
 {% endblock %}

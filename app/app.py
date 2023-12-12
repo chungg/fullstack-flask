@@ -6,7 +6,7 @@ from app import admin, api
 from app import config
 from app.cli import show
 from app.core.security import RegisterForm
-from app.extensions import csrf, migrate, security
+from app.extensions import csrf, migrate, reqs, security
 from app.models import auth as models
 from app.storage.db import db
 
@@ -23,6 +23,7 @@ def create_app(conf=None):
     else:
         app.config.from_object(conf)
 
+    reqs.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
     user_datastore = SQLAlchemyUserDatastore(db, models.User, models.Role)

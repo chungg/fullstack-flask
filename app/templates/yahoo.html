@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}finance{% endblock %}
+{% block head_css %}
+  <link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_bulma.min.css">
+{% endblock %}
+{% block head_scripts %}
+  <script src="https://unpkg.com/chart.js@4.4.0"></script>
+  <script src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
+  <script src="../../static/js/utils.js"></script>
+{% endblock %}
+{% block body %}
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        Finance
+      </h1>
+      <hr></hr>
+      <form
+        hx-boost="true"
+        hx-push-url="false"
+        hx-swap="beforeend"
+        hx-target="body"
+        action="/api/v1/data/market/prices"
+        method="GET">
+        <div class="field has-addons">
+          <div class="control">
+            <input class="input" id="tickerSearch" type="text" name="ticker" placeholder="Ticker">
+          </div>
+          <div class="control">
+            <button class="button is-primary">Submit</button>
+          </div>
+        </div>
+      </form>
+      <canvas id="priceChart"></canvas>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="is-striped" id="priceTable"></div>
+    </div>
+  </section>
+
+  <script>
+    document.body.addEventListener("displayPrices", function (evt) {
+      const chart = Chart.getChart(evt.detail.target);
+      const table = Tabulator.findTable("#priceTable")[0];
+      const data = JSON.parse(document.getElementById(evt.detail.dataId).textContent);
+      displayPrices(chart, table, data);
+      document.getElementById(evt.detail.dataId).remove();
+    });
+
+    new Chart(document.getElementById("priceChart"), {
+      type: "line",
+      options: {
+        responsive: true,
+        plugins: {
+          colors: {
+            forceOverride: true,
+          },
+          legend: {
+            position: "top",
+          },
+          title: {
+            display: false,
+            text: "Security Prices",
+          },
+          tooltip: {
+            position: "average",
+          },
+        },
+        interaction: {
+          axis: "x",
+          intersect: false,
+          mode: "nearest",
+        },
+      },
+    });
+
+    new Tabulator("#priceTable", {
+      layout: "fitData",
+      index: "date",
+      pagination: true, //enable.
+      paginationSize: 10, // this option can take any positive integer value
+      placeholder: function () {
+        //set placeholder based on if there are currently any header filters
+        return this.getHeaderFilters().length ? "No Matching Data" : "No Data";
+      },
+    });
+
+    function displayPrices(chart, table, data) {
+      const prices = data.indicators.quote[0].close;
+      // ideally, should check overlap of labels between datasets
+      table.updateOrAddData(data.timestamp.map((a, i) => ({ date: a, [data.meta.symbol]: prices[i] })));
+      if (!table.columnManager.columns.length) {
+        table.addColumn({ title: "Date", field: "date", frozen: true }, true);
+      }
+      table.addColumn({
+        title: data.meta.symbol,
+        field: data.meta.symbol,
+        hozAlign: "right",
+        headerSort: false,
+        formatter: "money",
+        formatterParams: { thousand: false },
+      });
+      chart.data.labels = data.timestamp;
+      // change prices to percentage so it's comparable
+      chart.data.datasets.push({
+        label: data.meta.symbol,
+        data: prices.map((x) => ((x - prices[0]) / prices[0]) * 100),
+      });
+      chart.update();
+    }
+  </script>
+{% endblock %}
