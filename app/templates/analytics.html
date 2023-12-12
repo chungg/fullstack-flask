@@ -29,12 +29,17 @@
       <hr></hr>
       <div class="field">
         <input id="switchSalesView" type="checkbox" name="switchSalesView" class="switch"
-          onchange="toggleView(this, Chart.getChart('line_chart_id'))"
+          onchange="toggleView(this, Chart.getChart('lineChartId'))"
           autocomplete="off">
         <label for="switchSalesView">As Percentage</label>
       </div>
-      <canvas hx-get="/api/v1/data/sales" hx-trigger="load" hx-indicator='.htmx-indicator'
-        id="line_chart_id"></canvas>
+      <canvas
+        hx-get="/api/v1/data/sales"
+        hx-trigger="load"
+        hx-indicator='.htmx-indicator'
+        hx-swap="beforeend"
+        hx-target="body"
+        id="lineChartId"></canvas>
       <span>https://data.bts.gov/Research-and-Statistics/Auto-Sales/7n6a-n5tz</span>
       <progress class="progress is-small htmx-indicator" max="100"></progress>
     </div>
@@ -44,12 +49,16 @@
     <div class="columns">
       <div class="column">
         <div class="field">
-          <button class="button" hx-get="/api/v1/data/random" hx-trigger="click, revealed"
-            hx-swap="none">populate</button>
+          <button
+            class="button"
+            hx-get="/api/v1/data/random"
+            hx-trigger="click, revealed"
+            hx-swap="beforeend"
+            hx-target="body">populate</button>
         </div>
       </div>
       <div class="column is-10">
-        <canvas id="chart_id" />
+        <canvas id="chartId" />
       </div>
     </div>
     </div>
@@ -68,11 +77,14 @@
     // chartjs + htmx with payload in HX-Trigger
     document.body.addEventListener("drawChart", function(evt){
       const chart = Chart.getChart(evt.detail.target)
-      addData(chart, evt.detail.datasets, evt.detail.labels);
+      // https://www.reddit.com/r/htmx/comments/10sdk43/comment/j72m2j7/
+      data = JSON.parse(document.getElementById(evt.detail.dataId).textContent);
+      addData(chart, data.datasets, data.labels);
+      document.getElementById(evt.detail.dataId).remove()
     })
 
     new Chart(
-      document.getElementById("chart_id"),
+      document.getElementById("chartId"),
       {
         type: "bar",
         options: {
@@ -89,7 +101,7 @@
     );
 
     new Chart(
-      document.getElementById("line_chart_id"),
+      document.getElementById("lineChartId"),
       {
         type: "line",
         options: {
