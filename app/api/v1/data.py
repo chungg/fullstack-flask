@@ -11,13 +11,15 @@ from app.api.v1 import bp
 
 @bp.get('/data/random')
 def random_data():
-    data = {'data': np.random.randint(0, 100, 6).tolist(),
-            'label': f'blah{np.random.randint(0, 10000)}'}
+    label = f'blah{np.random.randint(0, 10000)}'
+    data = {'datasets': [{'data': np.random.randint(0, 100, 6).tolist(),
+                         'label': label}]}
     if request.headers.get('Hx-Request'):
-        resp = flask.Response()
-        resp.headers['HX-Trigger'] = json.dumps(
-            {'drawChart': {'target': 'chart_id',
-                           'datasets': [data]}})
+        resp = flask.Response(
+            '<script id="%s" type="application/json">%s</script>' %
+            (label, json.dumps(data)))
+        resp.headers['HX-Trigger-After-Swap'] = json.dumps(
+            {'drawChart': {'target': 'chartId', 'dataId': label}})
         return resp
 
     return data
@@ -43,10 +45,10 @@ def sales_data():
                           'data': table['Auto sales'].to_pylist()}],
             'labels': pc.strftime(table['Date'], format='%Y-%m-%d').to_pylist()}
     if request.headers.get('Hx-Request'):
-        resp = flask.Response()
-        resp.headers['HX-Trigger'] = json.dumps(
-            {'drawChart': {'target': 'line_chart_id',
-                           **data}})
+        resp = flask.Response(
+            '<script id="lineChartData" type="application/json">%s</script>' % (json.dumps(data)))
+        resp.headers['HX-Trigger-After-Swap'] = json.dumps(
+            {'drawChart': {'target': 'lineChartId', 'dataId': 'lineChartData'}})
         return resp
     return data
 
