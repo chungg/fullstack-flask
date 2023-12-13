@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-switch@2.0.4/dist/css/bulma-switch.min.css">
+  {% block head_css %}{% endblock %}
+
+  <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+  {% block head_scripts %}{% endblock %}
+
+  <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body id="body">
+  {% block body %}{% endblock %}
+  <script>
+    // HTMX CSRF Token
+    document.body.addEventListener('htmx:configRequest', (event) => {
+      event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    })
+  </script>
+</body>
+</html>
