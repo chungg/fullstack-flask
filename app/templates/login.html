@@ -1,21 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %}login{% endblock %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  <title>Login</title>
-</head>
-
-{% if login_user_form.email.errors or login_user_form.password.errors %}
-  {% set error_class = " is-danger" %}
-{% endif %}
-
-<body>
-
+{% block body %}
+  {% if login_user_form.email.errors or login_user_form.password.errors %}
+    {% set error_class = " is-danger" %}
+  {% endif %}
   <section class="hero is-primary is-fullheight">
 
     <div class="hero-body">
@@ -23,7 +12,7 @@
 
         <div class="columns is-centered">
           <div class="column is-two-fifths">
-            <h3 class="title has-text-white">Log in to xyz</h3>
+            <h3 class="title has-text-white">Login to xyz</h3>
             <hr />
             <form action="/api/login" method="POST" class="box">
               {{ login_user_form.hidden_tag() }}
@@ -68,6 +57,4 @@
       </div>
     </div>
   </section>
-
-</body>
-</html>
+{% endblock %}
