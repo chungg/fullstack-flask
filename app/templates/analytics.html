@@ -40,7 +40,7 @@
         hx-swap="beforeend"
         hx-target="body"
         id="lineChartId"></canvas>
-      <span>https://data.bts.gov/Research-and-Statistics/Auto-Sales/7n6a-n5tz</span>
+      <sup>source: https://data.bts.gov/Research-and-Statistics/Auto-Sales/7n6a-n5tz</sup>
       <progress class="progress is-small htmx-indicator" max="100"></progress>
     </div>
   </section>
@@ -52,7 +52,7 @@
           <button
             class="button"
             hx-get="/api/v1/data/random"
-            hx-trigger="click, revealed"
+            hx-trigger="click, load"
             hx-swap="beforeend"
             hx-target="body">populate</button>
         </div>
@@ -66,6 +66,7 @@
   <section class="section">
     <div class="container">
       <div class="is-striped" id="death-table" hx-get="/api/v1/data/deaths" hx-trigger="revealed"></div>
+      <sup>source: https://www150.statcan.gc.ca/n1/daily-quotidien/231127/t001b-eng.htm</sup>
     </div>
   </section>
 
@@ -104,7 +105,9 @@
       document.getElementById("lineChartId"),
       {
         type: "line",
+        plugins: [arbLines],
         options: {
+          events: ['mousedown', 'mouseup', 'mousemove'],
           responsive: true,
           plugins: {
             legend: {
