@@ -16,6 +16,11 @@ def analytics():
     return flask.render_template("analytics.html")
 
 
+@bp.get('/yahoo')
+def yahoo():
+    return flask.render_template("yahoo.html")
+
+
 @bp.get('/logout')
 def logout():
     logout_user()
