@@ -149,6 +149,8 @@ todo how to set up external providers
   - https://blog.ohheybrian.com/2023/06/smarter-templating-with-htmx-and-flask/
   - https://www.advantch.com/blog/how-to-build-interactive-charts-in-python-using-htmx-and-echarts/
   - https://github.com/Konfuzian/htmx-examples-with-flask
+- js
+  - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
 
 # todo
 - more frontend via htmx https://htmx.org/docs/
@@ -156,3 +158,4 @@ todo how to set up external providers
 - worker processes? via ?
 - optimised ci via [mergify](https://mergify.com/)
 - https://unsuckjs.com/
+- plugin lines disappear (probably because afterevent is drawn before rendering);

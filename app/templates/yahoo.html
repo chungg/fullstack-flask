@@ -3,11 +3,6 @@
 {% block head_css %}
   <link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_bulma.min.css">
 {% endblock %}
-{% block head_scripts %}
-  <script src="https://unpkg.com/chart.js@4.4.0"></script>
-  <script src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
-  <script src="../../static/js/utils.js"></script>
-{% endblock %}
 {% block body %}
   <section class="section">
     <div class="container">
@@ -39,20 +34,38 @@
       <div class="is-striped" id="priceTable"></div>
     </div>
   </section>
+{% endblock %}
+{% block body_scripts %}
+  <script src="https://unpkg.com/chart.js@4.4.0"></script>
+  <script src="https://unpkg.com/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <script src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
 
-  <script>
-    document.body.addEventListener("displayPrices", function (evt) {
-      const chart = Chart.getChart(evt.detail.target);
-      const table = Tabulator.findTable("#priceTable")[0];
-      const data = JSON.parse(document.getElementById(evt.detail.dataId).textContent);
-      displayPrices(chart, table, data);
-      document.getElementById(evt.detail.dataId).remove();
-    });
+  <script type="module">
+    import { crosshairs } from "../../static/js/chart.plugins.crosshairs.js";
+    import { setupResponseHandlers } from "../../static/js/listeners.js";
+
+    setupResponseHandlers();
 
     new Chart(document.getElementById("priceChart"), {
       type: "line",
+      plugins: [crosshairs],
       options: {
+        events: ["mousedown", "mouseup", "mousemove"],
         responsive: true,
+        layout: {
+          padding: {
+            left: 15,
+          }
+        },
+        scales: {
+          x: {
+            parsing: false,
+            type: 'time',  // to convert iso date to english
+            time: {
+              unit: 'day'
+            }
+          },
+        },
         plugins: {
           colors: {
             forceOverride: true,
@@ -65,7 +78,7 @@
             text: "Security Prices",
           },
           tooltip: {
-            position: "average",
+            position: "nearest",
           },
         },
         interaction: {
@@ -83,32 +96,8 @@
       paginationSize: 10, // this option can take any positive integer value
       placeholder: function () {
         //set placeholder based on if there are currently any header filters
-        return this.getHeaderFilters().length ? "No Matching Data" : "No Data";
+        return this.initialised && this.getHeaderFilters().length ? "No Matching Data" : "No Data";
       },
     });
-
-    function displayPrices(chart, table, data) {
-      const prices = data.indicators.quote[0].close;
-      // ideally, should check overlap of labels between datasets
-      table.updateOrAddData(data.timestamp.map((a, i) => ({ date: a, [data.meta.symbol]: prices[i] })));
-      if (!table.columnManager.columns.length) {
-        table.addColumn({ title: "Date", field: "date", frozen: true }, true);
-      }
-      table.addColumn({
-        title: data.meta.symbol,
-        field: data.meta.symbol,
-        hozAlign: "right",
-        headerSort: false,
-        formatter: "money",
-        formatterParams: { thousand: false },
-      });
-      chart.data.labels = data.timestamp;
-      // change prices to percentage so it's comparable
-      chart.data.datasets.push({
-        label: data.meta.symbol,
-        data: prices.map((x) => ((x - prices[0]) / prices[0]) * 100),
-      });
-      chart.update();
-    }
   </script>
 {% endblock %}

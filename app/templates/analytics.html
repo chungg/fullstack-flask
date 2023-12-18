@@ -4,12 +4,6 @@
   <link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_bulma.min.css">
   <!--link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_simple.min.css"-->
 {% endblock %}
-{% block head_scripts %}
-  <script src="https://unpkg.com/chart.js@4.4.0"></script>
-  <script src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
-  <script src="../../static/js/utils.js"></script>
-{% endblock %}
-
 {% block body %}
   <section class="section">
     <div class="container">
@@ -59,16 +53,18 @@
       <sup>source: https://www150.statcan.gc.ca/n1/daily-quotidien/231127/t001b-eng.htm</sup>
     </div>
   </section>
+{% endblock %}
+{% block body_scripts %}
+  <script src="https://unpkg.com/chart.js@4.4.0"></script>
+  <script src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
+  <script type="module">
+    import { arbLines } from "../../static/js/chart.plugins.arblines.js";
+    import { crosshairs } from "../../static/js/chart.plugins.crosshairs.js";
+    import { toggleView } from "../../static/js/chart.utils.js";
+    import { setupResponseHandlers } from "../../static/js/listeners.js";
 
-  <script>
-    // chartjs + htmx with payload in HX-Trigger
-    document.body.addEventListener("drawChart", function (evt) {
-      const chart = Chart.getChart(evt.detail.target);
-      // https://www.reddit.com/r/htmx/comments/10sdk43/comment/j72m2j7/
-      data = JSON.parse(document.getElementById(evt.detail.dataId).textContent);
-      addData(chart, data.datasets, data.labels);
-      document.getElementById(evt.detail.dataId).remove();
-    });
+    setupResponseHandlers();
+    window.toggleView = toggleView;
 
     new Chart(document.getElementById("chartId"), {
       type: "bar",
@@ -86,7 +82,7 @@
 
     new Chart(document.getElementById("lineChartId"), {
       type: "line",
-      plugins: [arbLines],
+      plugins: [arbLines, crosshairs],
       options: {
         events: ["mousedown", "mouseup", "mousemove"],
         responsive: true,
