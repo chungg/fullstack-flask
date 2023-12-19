@@ -8,22 +8,23 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-switch@2.0.4/dist/css/bulma-switch.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_bulma.min.css">
   {% block head_css %}{% endblock %}
 
   <script src="https://unpkg.com/htmx.org@1.9.9"></script>
-  {% block head_scripts %}{% endblock %}
+  {% block head_scripts %}
+  <script src="https://unpkg.com/chart.js@4.4.0" defer></script>
+  <script src="https://unpkg.com/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js" defer></script>
+  <script src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js" defer></script>
+  <script type="module" src="../../static/js/index.js"></script>
+  {% endblock %}
 
   <title>{% block title %}{% endblock %}</title>
 </head>
 
 <body id="body">
-  {% block body %}{% endblock %}
-  <script>
-    // HTMX CSRF Token
-    document.body.addEventListener('htmx:configRequest', (event) => {
-      event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
-    })
-  </script>
-  {% block body_scripts %}{% endblock %}
+  {% block body_content %}{% endblock %}
+  {% block body_scripts %}
+  {% endblock %}
 </body>
 </html>

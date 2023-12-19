@@ -7,6 +7,7 @@ bp = APIBlueprint('api', __name__)
 
 
 from app.api import root  # noqa
+from app.api import views  # noqa
 
 
 bp.register_blueprint(bp_v1, url_prefix='/api/v1')

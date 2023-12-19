@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}login{% endblock %}
 
-{% block body %}
+{% block body_content %}
   {% if login_user_form.email.errors or login_user_form.password.errors %}
     {% set error_class = " is-danger" %}
   {% endif %}

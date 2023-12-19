@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% block title %}finance{% endblock %}
-{% block head_css %}
-  <link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_bulma.min.css">
-{% endblock %}
-{% block body %}
+{% block body_content %}
   <section class="section">
     <div class="container">
       <h1 class="title">
@@ -34,70 +31,4 @@
       <div class="is-striped" id="priceTable"></div>
     </div>
   </section>
-{% endblock %}
-{% block body_scripts %}
-  <script src="https://unpkg.com/chart.js@4.4.0"></script>
-  <script src="https://unpkg.com/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-  <script src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
-
-  <script type="module">
-    import { crosshairs } from "../../static/js/chart.plugins.crosshairs.js";
-    import { setupResponseHandlers } from "../../static/js/listeners.js";
-
-    setupResponseHandlers();
-
-    new Chart(document.getElementById("priceChart"), {
-      type: "line",
-      plugins: [crosshairs],
-      options: {
-        events: ["mousedown", "mouseup", "mousemove"],
-        responsive: true,
-        layout: {
-          padding: {
-            left: 15,
-          }
-        },
-        scales: {
-          x: {
-            parsing: false,
-            type: 'time',  // to convert iso date to english
-            time: {
-              unit: 'day'
-            }
-          },
-        },
-        plugins: {
-          colors: {
-            forceOverride: true,
-          },
-          legend: {
-            position: "top",
-          },
-          title: {
-            display: false,
-            text: "Security Prices",
-          },
-          tooltip: {
-            position: "nearest",
-          },
-        },
-        interaction: {
-          axis: "x",
-          intersect: false,
-          mode: "nearest",
-        },
-      },
-    });
-
-    new Tabulator("#priceTable", {
-      layout: "fitData",
-      index: "date",
-      pagination: true, //enable.
-      paginationSize: 10, // this option can take any positive integer value
-      placeholder: function () {
-        //set placeholder based on if there are currently any header filters
-        return this.initialised && this.getHeaderFilters().length ? "No Matching Data" : "No Data";
-      },
-    });
-  </script>
 {% endblock %}

@@ -1,10 +1,6 @@
 {% extends "base.html" %}
 {% block title %}charts{% endblock %}
-{% block head_css %}
-  <link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_bulma.min.css">
-  <!--link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_simple.min.css"-->
-{% endblock %}
-{% block body %}
+{% block body_content %}
   <section class="section">
     <div class="container">
       <h1 class="title">
@@ -19,7 +15,7 @@
       </div>
       <canvas
         hx-get="/api/v1/data/sales"
-        hx-trigger="load"
+        hx-trigger="pageReady from:body"
         hx-indicator='.htmx-indicator'
         hx-swap="beforeend"
         hx-target="body"
@@ -36,7 +32,7 @@
           <button
             class="button"
             hx-get="/api/v1/data/random"
-            hx-trigger="click, load"
+            hx-trigger="click, pageReady from:body"
             hx-swap="beforeend"
             hx-target="body">populate</button>
         </div>
@@ -53,60 +49,4 @@
       <sup>source: https://www150.statcan.gc.ca/n1/daily-quotidien/231127/t001b-eng.htm</sup>
     </div>
   </section>
-{% endblock %}
-{% block body_scripts %}
-  <script src="https://unpkg.com/chart.js@4.4.0"></script>
-  <script src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
-  <script type="module">
-    import { arbLines } from "../../static/js/chart.plugins.arblines.js";
-    import { crosshairs } from "../../static/js/chart.plugins.crosshairs.js";
-    import { toggleView } from "../../static/js/chart.utils.js";
-    import { setupResponseHandlers } from "../../static/js/listeners.js";
-
-    setupResponseHandlers();
-    window.toggleView = toggleView;
-
-    new Chart(document.getElementById("chartId"), {
-      type: "bar",
-      options: {
-        responsive: true,
-        title: {
-          display: false,
-          text: "",
-        },
-      },
-      data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-      },
-    });
-
-    new Chart(document.getElementById("lineChartId"), {
-      type: "line",
-      plugins: [arbLines, crosshairs],
-      options: {
-        events: ["mousedown", "mouseup", "mousemove"],
-        responsive: true,
-        plugins: {
-          colors: {
-            forceOverride: true,
-          },
-          legend: {
-            position: "top",
-          },
-          title: {
-            display: true,
-            text: "Vehicles Sales",
-          },
-          tooltip: {
-            position: "average",
-          },
-        },
-        interaction: {
-          axis: "x",
-          intersect: false,
-          mode: "nearest",
-        },
-      },
-    });
-  </script>
 {% endblock %}
