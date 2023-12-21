@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}demo{% endblock %}
-{% block body %}
+{% block body_content %}
   <section class="hero is-info is-fullheight">
     <div class="hero-head">
       <nav class="navbar">
@@ -18,11 +18,14 @@
           <div id="navbarMenu" class="navbar-menu">
             <div class="navbar-end">
               <span class="navbar-item">
-                <a class="button is-white is-outlined" href="/admin">
+                <a
+                  class="button is-white is-outlined"
+                  hx-boost="true"
+                  href="/analytics">
                   <span class="icon">
                     <i class="fa fa-superpowers"></i>
                   </span>
-                  <span>Something</span>
+                  <span>Analytics</span>
                 </a>
               </span>
               <span class="navbar-item">
@@ -34,7 +37,13 @@
                 </a>
               </span>
               <span class="navbar-item">
-                <a class="button is-white is-outlined" href="https://github.com/BulmaTemplates/bulma-templates/blob/master/templates/landing.html">
+                <!-- alternative to hx-boost -->
+                <a
+                  class="button is-white is-outlined"
+                  hx-push-url="true"
+                  hx-select-oob="body"
+                  hx-target="body"
+                  hx-get="/yahoo">
                   <span class="icon">
                     <i class="fa fa-github"></i>
                   </span>
