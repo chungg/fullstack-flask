@@ -1,4 +1,4 @@
-import { displayPrices, updateChart } from "../../static/js/api.js";
+import { handler } from "../../static/js/api.js";
 import setupYahooPage from "../../static/js/page.yahoo.js";
 
 const router = (evt) => {
@@ -29,6 +29,4 @@ window.addEventListener("initPage", router);
 // handle browser back/fwd. location.reload() on popstate works as well but is terrible solution
 window.addEventListener("htmx:historyRestore", router);
 
-// TODO: use single event and process based on response/url
-window.addEventListener("displayPrices", displayPrices);
-window.addEventListener("drawChart", updateChart);
+window.addEventListener("apiResponse", handler);

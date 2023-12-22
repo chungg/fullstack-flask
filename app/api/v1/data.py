@@ -1,33 +1,26 @@
 import datetime
-import json
 
-import flask
 from flask import request
 import pyarrow.csv as pa_csv
 import pyarrow.compute as pc
 import numpy as np
 
 from app.api.v1 import bp
+from app.api.utils import hx_api
 from app.extensions import reqs
 
 
 @bp.get('/data/random')
+@hx_api
 def random_data():
     label = f'blah{np.random.randint(0, 10000)}'
     data = {'datasets': [{'data': np.random.randint(0, 100, 6).tolist(),
                          'label': label}]}
-    if request.headers.get('Hx-Request'):
-        resp = flask.Response(
-            '<script id="%s" type="application/json">%s</script>' %
-            (label, json.dumps(data)))
-        resp.headers['HX-Trigger-After-Swap'] = json.dumps(
-            {'drawChart': {'target': 'chartId', 'dataId': label}})
-        return resp
-
     return data
 
 
 @bp.get('/data/sales')
+@hx_api
 def sales_data():
     # sample processing via duckdb. performance is much worse as of writing
     # df = duckdb.read_csv('app/static/data/Monthly_Transportation_Statistics.csv')
@@ -46,12 +39,6 @@ def sales_data():
                          {'label': 'auto',
                           'data': table['Auto sales'].to_pylist()}],
             'labels': pc.strftime(table['Date'], format='%Y-%m-%d').to_pylist()}
-    if request.headers.get('Hx-Request'):
-        resp = flask.Response(
-            '<script id="lineChartData" type="application/json">%s</script>' % (json.dumps(data)))
-        resp.headers['HX-Trigger-After-Swap'] = json.dumps(
-            {'drawChart': {'target': 'lineChartId', 'dataId': 'lineChartData'}})
-        return resp
     return data
 
 
@@ -96,6 +83,7 @@ USER_AGENT_HEADERS = {
 
 
 @bp.get('/data/market/prices')
+@hx_api
 def get_prices():
     ticker = request.args['ticker']
     interval = request.args.get('interval', '1d')
@@ -110,11 +98,4 @@ def get_prices():
     data = res.json()['chart']['result'][0]
     data['timestamp'] = np.datetime_as_string(
         np.asarray(data['timestamp'], dtype='datetime64[s]'), unit='D').tolist()
-    if request.headers.get('Hx-Request'):
-        resp = flask.Response()
-        resp = flask.Response(
-            '<script id="priceData" type="application/json">%s</script>' % (json.dumps(data)))
-        resp.headers['HX-Trigger-After-Swap'] = json.dumps(
-            {'displayPrices': {'target': 'priceChart', 'dataId': 'priceData'}})
-        return resp
     return data
