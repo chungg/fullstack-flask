@@ -7,7 +7,7 @@ sample app which provides:
   - backend via [apiflask](https://github.com/apiflask/apiflask)
   - db via [sqlalchemy](https://github.com/sqlalchemy/sqlalchemy)
   - config management via [dotenv](https://github.com/theskumar/python-dotenv)
-  - security via [flask-security-too](https://github.com/Flask-Middleware/flask-security)
+  - security via [flask-security](https://github.com/pallets-eco/flask-security)
   - admin views via [flask-admin](https://github.com/flask-admin/flask-admin)
   - package management via [uv](https://github.com/astral-sh/uv)
   - cli via [click](https://github.com/pallets/click) and [rich](https://github.com/Textualize/rich)
@@ -27,7 +27,7 @@ sample app which provides:
 - install system requirements
   - debian/ubuntu - `sudo apt install libpq-dev postgresql`
   - uv - `curl -LsSf https://astral.sh/uv/install.sh | sh`
-- install python reqs - `uv install`
+- install python reqs - `uv sync --locked`
 - configure db
   - `sudo -u postgres psql`
   - `create database <dbname>;`
