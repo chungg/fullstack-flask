@@ -1,13 +1,14 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
-ENV PIP_NO_CACHE_DIR=1
+ENV UV_COMPILE_BYTECODE=1
 
-COPY Pipfile Pipfile.lock .
+COPY --from=ghcr.io/astral-sh/uv:0.7.14 /uv /uvx /bin/
+COPY pyproject.toml uv.lock .
 
+# FIXME: update and properly follow https://docs.astral.sh/uv/guides/integration/docker/
 RUN apt-get update && \
     apt-get install -y --no-install-recommends vim libpq-dev build-essential && \
-    pip install -U pip && pip install pipenv && \
-    CI=1 PIPENV_NOSPIN=1 pipenv install --system --deploy && \
+    CI=1 uv sync --locked && \
     apt-get purge -y --auto-remove build-essential && \
     apt-get autoremove -y --purge && \
     apt-get clean && \
