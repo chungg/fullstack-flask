@@ -7,25 +7,24 @@ on:
   pull_request:
 
 env:
-  PYTHON_VERSION: '3.11'
+  PYTHON_VERSION: '3.12'
 
 jobs:
   check-style:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: set up python
-        uses: actions/setup-python@v4
+      # https://docs.astral.sh/uv/guides/integration/github/
+      - name: set up python and uv
+        uses: astral-sh/setup-uv@v5
         with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
           python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pipenv'
       - name: install dependencies
-        run: |
-          pip install pipenv
+        run: uv sync --locked --all-extras --dev
       - name: check style
-        run: |
-          pipenv install --dev
-          pipenv run flake8
+        run: uv run flake8
 
   check-web-style:
     runs-on: ubuntu-latest
@@ -58,18 +57,16 @@ jobs:
       SQLALCHEMY_DATABASE_URI: postgresql://postgres:postgres@localhost/postgres
     steps:
       - uses: actions/checkout@v4
-      - name: set up python
-        uses: actions/setup-python@v4
+      - name: set up python and uv
+        uses: astral-sh/setup-uv@v5
         with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
           python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pipenv'
       - name: install dependencies
-        run: |
-          pip install pipenv
-          pipenv install --dev
+        run: uv sync --locked --all-extras --dev
       - name: run unit tests
-        run: |
-          pipenv run pytest --cov-report term --cov=app tests/unit
+        run: uv run pytest --cov-report term --cov=app tests/unit
 
   run-system-tests:
     runs-on: ubuntu-latest
@@ -96,27 +93,27 @@ jobs:
       TEST_PW: abc123xyz789
     steps:
       - uses: actions/checkout@v4
-      - name: set up python
-        uses: actions/setup-python@v4
+      - name: set up python and uv
+        uses: astral-sh/setup-uv@v5
         with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
           python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pipenv'
       - name: install dependencies
         run: |
-          pip install pipenv
-          pipenv install --dev
-          pipenv run playwright install chromium
+          uv sync --locked --all-extras --dev
+          uv run playwright install chromium
       - name: initialise db
         run: |
-          ENV=CI pipenv run flask --app app.app db upgrade --directory app/storage/migrations
-          ENV=CI pipenv run flask --app app.app roles create superuser
-          ENV=CI pipenv run flask --app app.app users create $TEST_USER --password $TEST_PW -a
-          ENV=CI pipenv run flask --app app.app roles add $TEST_USER superuser
+          ENV=CI uv run flask --app app.app db upgrade --directory app/storage/migrations
+          ENV=CI uv run flask --app app.app roles create superuser
+          ENV=CI uv run flask --app app.app users create $TEST_USER --password $TEST_PW -a
+          ENV=CI uv run flask --app app.app roles add $TEST_USER superuser
       - name: start server
         run: |
-          ENV=CI pipenv run flask --app app.app run & \
+          ENV=CI uv run flask --app app.app run & \
             sleep 3 && \
             curl http://localhost:5000 -I
       - name: run system tests
         run: |
-          ENV=CI pipenv run pytest tests/system
+          ENV=CI uv run pytest tests/system

@@ -9,7 +9,7 @@ sample app which provides:
   - config management via [dotenv](https://github.com/theskumar/python-dotenv)
   - security via [flask-security-too](https://github.com/Flask-Middleware/flask-security)
   - admin views via [flask-admin](https://github.com/flask-admin/flask-admin)
-  - package management via [pipenv](https://github.com/pypa/pipenv)
+  - package management via [uv](https://github.com/astral-sh/uv)
   - cli via [click](https://github.com/pallets/click) and [rich](https://github.com/Textualize/rich)
 - ui
   - frontend via [htmx](https://github.com/bigskysoftware/htmx) and [jinja](https://github.com/pallets/jinja)
@@ -25,8 +25,9 @@ sample app which provides:
 ## setup
 
 - install system requirements
-  - debian/ubuntu - `sudo apt install libpq-dev postgresql pipenv`
-- install python reqs - `pipenv install`
+  - debian/ubuntu - `sudo apt install libpq-dev postgresql`
+  - uv - `curl -LsSf https://astral.sh/uv/install.sh | sh`
+- install python reqs - `uv install`
 - configure db
   - `sudo -u postgres psql`
   - `create database <dbname>;`
@@ -54,32 +55,32 @@ todo how to set up external providers
 
 #### autogen migrations
 
-- ENV=local pipenv run flask --app app.app db migrate -m '<description>' --directory app/storage/migrations
+- ENV=local uv run flask --app app.app db migrate -m '<description>' --directory app/storage/migrations
 
 #### apply
 
-- ENV=local pipenv run flask --app app.app db upgrade --directory app/storage/migrations
+- ENV=local uv run flask --app app.app db upgrade --directory app/storage/migrations
 
 #### init (if starting from scratch or you want to compress migrations)
 
-- ENV=local pipenv run flask --app app.app db init --directory app/storage/migrations
+- ENV=local uv run flask --app app.app db init --directory app/storage/migrations
 
 ### permissions
 
 #### init
 
-- ENV=local pipenv run flask --app app.app roles create superuser
-- ENV=local pipenv run flask --app app.app users create <email> -a
+- ENV=local uv run flask --app app.app roles create superuser
+- ENV=local uv run flask --app app.app users create <email> -a
 
 #### details
 
-- ENV=local pipenv run flask --app app.app show roles
+- ENV=local uv run flask --app app.app show roles
 
 ## running
 
 ### server (locally)
 
-- ENV=local pipenv run flask --app app.app run --debug
+- ENV=local uv run flask --app app.app run --debug
 
 ### server (container - locally)
 
@@ -98,32 +99,32 @@ todo how to set up external providers
 
 ## running tests
 
-- pipenv install --dev
+- uv sync --locked --all-extras --dev
 
 ### styling
 
-- pipenv run flake8
+- uv run flake8
 - ./biome check app/static
 
 ### unit
 
-- SQLALCHEMY_DATABASE_URI=<postgres_uri> pipenv run pytest tests/unit
+- SQLALCHEMY_DATABASE_URI=<postgres_uri> uv run pytest tests/unit
 - see github actions workflow for sample
 
 ### system
 
 #### setup
 
-- pipenv run playwright install
+- uv run playwright install
 
 #### run
 
-- ENV=local pipenv run flask --app app.app run
-- TEST_USER=<user> TEST_PW=<pw> pipenv run pytest tests/system
+- ENV=local uv run flask --app app.app run
+- TEST_USER=<user> TEST_PW=<pw> uv run pytest tests/system
 
 #### debug
 
-- TEST_USER=<user> TEST_PW=<pw> pipenv run pytest tests/system -k <test_case> --headed --slowmo 1000
+- TEST_USER=<user> TEST_PW=<pw> uv run pytest tests/system -k <test_case> --headed --slowmo 1000
 
 ## resources
 
